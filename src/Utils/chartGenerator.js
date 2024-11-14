@@ -69,7 +69,7 @@ function chartGenerator (dataGraphic, fechaStart, DB) {
       for (let i = 0; i < dataGraphic.numDataByVarPhysics[index]; i++) {
         dataVars[index][i] = []
         dataVars[index][i] = dataGraphic.data[index][i].map((e) => {
-          return {x: Math.floor(new Date(e.x).getTime()), y:e.y}
+          return {x: new Date(e.x).getTime() + 18000000, y:e.y}
         })
       }
     }
@@ -177,7 +177,7 @@ function chartGenerator (dataGraphic, fechaStart, DB) {
         duration: 1000,
         easing: 'linear',
         from: 1,
-        to: 0,
+        to: 0.4,
         loop: 0
       },
     },
@@ -185,8 +185,8 @@ function chartGenerator (dataGraphic, fechaStart, DB) {
       legend: {
         display: true,
         title: {
-          display: false,
-          text: 'titulo por defecto',
+          display: dataGraphic.title ? true : false,
+          text: dataGraphic.title,
           font: {
             size: 15,
           }

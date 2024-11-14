@@ -17,13 +17,12 @@ async function getDataDB(nameData, numberdata, timeMin, timeMax, type) {
   if(type == 'Medidor'){ // -----------Cosulta a medidor
     queryDB = `SELECT
     "${nameData}"
-    FROM edificio WHERE "nombre"='${type} ${numberdata}' AND time > '${timeMin}' + 5h AND time < '${timeMax}' + 5h GROUP BY "circuito"`
+    FROM edificio WHERE "nombre"='${type} ${numberdata}' AND time > '${timeMin}' AND time < '${timeMax}' GROUP BY "circuito" tz('America/Bogota')`
   } else if (type == 'Sensor') { // ------------------Cosulta a sensores
     queryDB = `SELECT 
     "${nameData}"
-    FROM edificio WHERE "nombre"='${type} ${numberdata}' AND time > '${timeMin}' + 5h AND time < '${timeMax}' + 5h`
+    FROM edificio WHERE "nombre"='${type} ${numberdata}' AND time > '${timeMin}' AND time < '${timeMax}' tz('America/Bogota')`
   }
-
 
   const response = fetch('http://74.208.139.232:1880/greenyellow', {
       method: 'POST',
@@ -44,7 +43,6 @@ async function getDataDB(nameData, numberdata, timeMin, timeMax, type) {
         }
       })
       result[result.length] = totalToAddResult
-
     } else if (type == 'Sensor'){
       res.forEach((e) => {
         result[0] = !result[0] ? [] : result[0]
@@ -57,13 +55,12 @@ async function getDataDB(nameData, numberdata, timeMin, timeMax, type) {
   return dataGet
 }
 
-async function getTotalMeasurement(nameData, numberdata, timeMin, timeMax, numberOfDays) {
+async function totalAccumulatedEnergy(nameData, numberdata, timeMin, timeMax) {
   let queryDB = ''
   let result = [];
   let totalToAddResult = [];
 
-
-  queryDB =`SELECT LAST("${nameData}") - FIRST("${nameData}") AS "consumo" FROM edificio WHERE "nombre"='Medidor ${numberdata}' AND time > '${timeMin}' AND time < '${timeMax}' GROUP BY time(24h), "circuito"`
+  queryDB =`SELECT LAST("${nameData}") - FIRST("${nameData}") AS "consumo" FROM edificio WHERE "nombre"='Medidor ${numberdata}' AND time >= '${timeMin}' AND time < '${timeMax}' GROUP BY time(24h), "circuito"`
 
   let response = await fetch( "http://74.208.139.232:1880/greenyellow", {
   method: 'POST',
@@ -73,7 +70,6 @@ async function getTotalMeasurement(nameData, numberdata, timeMin, timeMax, numbe
   .then(r => r.json())
   .then(res => {
     res.map(e => {
-      // console.log(numberOfDays)
       if(e.circuito != 'Total') {
         result[e.circuito - 1] = !result[e.circuito-1] ? [] : result[e.circuito-1]
         result[e.circuito - 1].push({x: e.time, y:e.consumo})
@@ -89,4 +85,4 @@ async function getTotalMeasurement(nameData, numberdata, timeMin, timeMax, numbe
   return response
 }
 
-export { getDataDB, getTotalMeasurement }
+export { getDataDB, totalAccumulatedEnergy }

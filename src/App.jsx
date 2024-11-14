@@ -5,9 +5,9 @@ function App() {
 
   return (
     <>
-      <div className="grid grid-cols-1">
-        <AppGraphics/>
+      <div className="grid grid-cols-1 w-[80%]">
         <AppEnergia/>
+        <AppGraphics/>
       </div>
     </>
   )

@@ -18,7 +18,7 @@ import {
 } from "chart.js";
 import { Chart } from "react-chartjs-2";
 import zoomPlugin from 'chartjs-plugin-zoom';
-import { getTotalMeasurement } from "../Utils/test.js";
+import { totalAccumulatedEnergy } from "../Utils/InfluxDB.js";
 import chartGenerator from "../Utils/chartGenerator.js";
 
 ChartJS.register(
@@ -43,40 +43,35 @@ function AppEnergia() {
   const chartRef = useRef(null);
   const [dataLoaded, setDataLoaded] = useState(null);
   const [error, setError] = useState(null);
-  const DB = true;
+  const DB = false;
   const fechaStart = "2024-11-07 00:00:00";
-  const min = "2024-10-17T00:00:00Z"
+  const min = "2024-10-20T00:00:00Z"
   const max = "2024-11-06T00:00:00Z"
 
   const dataGraphicTemplate = {
+    title: false,
     numVarPhysics: 1,
     namesAxisY: ['Energia (kwh)', 'Corriente (A)', 'Temperatura (°C)'],
-    positionAxisY: [0, 1, 1],
-    numDataByVarPhysics: [4, 1, 1],
+    positionAxisY: [0],
+    numDataByVarPhysics: [4],
     data: [],
     namesVar: [
-      ["Energia M1", "Energia L2", "Energia L3", "Energia Total"],
-      ["Corriente L1", "Corriente L2", "Corriente L3"],
-      ["Temp 1", "Temp 2", "Temp 3"],
+      ["L1", "L2", "L3", "Total"]
     ],
-    type: [1, 0, 0],
-    minRangeAxisX: 5,
-    opacity: [0.2, 0.2, 0.2],
+    type: [1],
+    minRangeAxisX: 60,
+    opacity: [0.2],
     zoom: true
   };
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const voltajeData = await getTotalMeasurement("Energia Activa", 1, min, max, 1)
-        // const temperaturaData = await getDataDB("Corriente", 1, min, max, 'Medidor')
-        // const potenciaActivaData = await getDataDB("Temperatura", 1, min, max, 'Sensor')
-
+        const voltajeData = await totalAccumulatedEnergy("Energia Activa", 1, min, max, 1)
         setDataLoaded({
           ...dataGraphicTemplate,
           data: [voltajeData]
         });
-
 
       } catch (error) {
         console.error("Error al obtener datos de la base de datos:", error);
@@ -90,9 +85,7 @@ function AppEnergia() {
       setDataLoaded({
         ...dataGraphicTemplate,
         data: [
-          [[],[],[]],
-          [[],[],[]],
-          [[],[],[]]
+          [[1,2,3],[2,4,3],[1,8,6],[1,12,6]],
         ]
       });
     }

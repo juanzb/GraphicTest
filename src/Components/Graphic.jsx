@@ -18,7 +18,7 @@ import {
 } from "chart.js";
 import { Chart } from "react-chartjs-2";
 import zoomPlugin from 'chartjs-plugin-zoom';
-import { getDataDB } from "../Utils/test.js";
+import { getDataDB } from "../Utils/InfluxDB.js";
 import chartGenerator from "../Utils/chartGenerator.js";
 
 
@@ -47,10 +47,11 @@ function AppGraphics() {
   const [error, setError] = useState(null);
   const DB = true;
   const fechaStart = "2024-11-07 00:00:00";
-  const min = "2024-10-12T00:00:00Z"
-  const max = "2024-10-13T00:00:00Z"
+  const min = "2024-11-01T00:00:00Z"
+  const max = "2024-11-01T01:00:00Z"
 
   const dataGraphicTemplate = {
+    title: false,
     numVarPhysics: 1,
     namesAxisY: ['Voltaje (v)', 'Corriente (A)', 'Temperatura (°C)'],
     positionAxisY: [0, 1, 1],
@@ -97,6 +98,10 @@ function AppGraphics() {
         ]
       });
     }
+
+
+
+    
   }, [DB]);
 
   if (!dataLoaded) {
