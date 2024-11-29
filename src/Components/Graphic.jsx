@@ -41,31 +41,35 @@ ChartJS.register(
 )
 
 
-function AppGraphics() {
-  const chartRef = useRef(null);
+function AppGraphics() {                          
+  const chartRef = useRef(null);                  
   const [dataLoaded, setDataLoaded] = useState(null);
-  const [error, setError] = useState(null);
-  const DB = true;
-  const fechaStart = "2024-11-07 00:00:00";
-  const min = "2024-11-01T00:00:00Z"
-  const max = "2024-11-05T01:00:00Z"
+  const [error, setError] = useState(null);       
+  const DB = true;                                // habilitar funcionamineto con base de datos
+  const fechaStart = "2024-11-07 00:00:00";       // fecha de inicio de eje x de la grafica
+  const min = "2024-11-01T00:00:00Z"              // tiempo minimo para la consulta a base de datos
+  const max = "2024-11-05T01:00:00Z"              // tiempo maximo para consultar a base de datos
 
   const dataGraphicTemplate = {
-    title: false,
-    numVarPhysics: 3,
-    namesAxisY: ['Voltaje (v)', 'Corriente (A)', 'Temperatura (°C)'],
-    positionAxisY: [0, 1, 1],
-    numDataByVarPhysics: [1, 1, 1],
-    data: [],
-    namesVar: [
-      ["Voltaje L1", "Voltaje L2", "Voltaje L3"],
-      ["Corriente L1", "Corriente L2", "Corriente L3"],
-      ["Temp 1", "Temp 2", "Temp 3"],
-    ],
-    type: [0, 0, 0],
-    minRangeAxisX: 5,
-    opacity: [0.2, 0.2, 0.2],
-    zoom: true
+    title: false,                                 // nombre del titulo o false
+    numVarPhysics: 3,                             // numero de variables principales a mostrar
+    namesAxisY: ['var 1', 'var 2', 'var 3'],      // nombres asigandos a cada variable principal
+    positionAxisY: [0, 1, 1],                     // pisition del eje vertical para la variable principal
+    numDataByVarPhysics: [3, 1, 1],               // numero de SUBvariables por cada variable principal
+    data: [                                       // valores a mostar en la grafica por cada SUBvariable por defecto vacio
+      // [[],[],[],...[]n], valores pora configucaion la variables en este ejemplo
+      // [[],[],[],...[]n], valores pora configucaion la variables en este ejemplo
+      // [[],[],[],...[]n] valores pora configucaion la variables en este ejemplo
+    ],                                            
+    namesVar: [                                   // nombres a mostar en la grafica por cada SUBvariable
+      ["var 1.1", "var 1.2", "var 1.3"],          // nombres para cada SUBvariable de cada variable principal
+      ["var 2.1", "var 2.2", "var 2.3"],          // nombres para cada SUBvariable de cada variable principal
+      ["var 3.1", "var 3.2", "var 3.3"],          // nombres para cada SUBvariable de cada variable principal
+    ],                                            // 
+    type: [0, 0, 0],                              // tipo de grafica: 0:lineal, 1: barra
+    minRangeAxisX: 5,                             // rango de resolucion del eje X
+    opacity: [0.2, 0.2, 0.2],                     // opacidad aplicada a variables princiales
+    zoom: true                                    // habilitar el zoom en la grafica
   };
 
   useEffect(() => {
@@ -120,6 +124,7 @@ function AppGraphics() {
   if (error) {
     console.log('Error DB')
   }
+
   const resultGraphics = chartGenerator(dataLoaded, fechaStart, DB);
 
   return (

@@ -25,7 +25,8 @@
   // intervalo de tiempo en "MINUTOS" en que se dan los valores de la grafica
   minRangeAxisX: 5,
   // opacidad del fondo de la grafica
-  opacity: [0.2, 0.6, 0.6]
+  opacity: [0.2, 0.6, 0.6],
+  zoom: true
 }
 // recibes informacion de base de datos ???? si = true, no = false
 const DB = false
