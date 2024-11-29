@@ -19,7 +19,7 @@ import {
 import { Chart } from "react-chartjs-2";
 import zoomPlugin from 'chartjs-plugin-zoom';
 import { totalAccumulatedEnergy } from "../Utils/InfluxDB.js";
-import chartGenerator from "../Utils/chartGenerator.js";
+import chartGenerator from '../Utils/chartGenerator.js'
 
 ChartJS.register(
   LinearScale,
@@ -43,9 +43,9 @@ function AppEnergia() {
   const chartRef = useRef(null);
   const [dataLoaded, setDataLoaded] = useState(null);
   const [error, setError] = useState(null);
-  const DB = false;
+  const DB = true;
   const fechaStart = "2024-11-07 00:00:00";
-  const min = "2024-10-20T00:00:00Z"
+  const min = "2024-10-25T00:00:00Z"
   const max = "2024-11-06T00:00:00Z"
 
   const dataGraphicTemplate = {
@@ -67,10 +67,10 @@ function AppEnergia() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const voltajeData = await totalAccumulatedEnergy("Energia Activa", 1, min, max, 1)
+        const energyData = await totalAccumulatedEnergy("Energia Activa", 1, min, max)
         setDataLoaded({
           ...dataGraphicTemplate,
-          data: [voltajeData]
+          data: [energyData]
         });
 
       } catch (error) {
